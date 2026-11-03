@@ -54,8 +54,8 @@ $NODE scripts/fetch.mjs "https://a" "https://b" --dump markdown --json
 
 常用参数（透传给 lightpanda，均可组合）：
 `--dump markdown|html|structured_data|semantic_tree|semantic_tree_text|png|pdf`、
-`--wait-ms` / `--wait-selector` / `--wait-until`、`--json`、`--cookie`、`--obey-robots`、
-`--block-private-networks`、`--load-resources iframe,image,stylesheet`、`--` 后接任意上游参数。
+`--wait-ms` / `--wait-selector` / `--wait-until`、`--strip clutter`（只要正文）、`--json`、`--cookie`、
+`--obey-robots`、`--block-private-networks`、`--load-resources iframe,image,stylesheet`、`--` 后接任意上游参数。
 
 **判定返回内容**（用 `--json` 时）：
 ```jsonc
@@ -73,6 +73,11 @@ $NODE scripts/fetch.mjs "https://a" "https://b" --dump markdown --json
 ## 3. P3：有状态会话（cookie / 多步 / 表单）
 
 ```sh
+# 0) cookie 转换（浏览器导出的 Playwright storageState → lightpanda 格式）
+$NODE scripts/cookies.mjs convert --from playwright --in storageState.json --out cookies.json
+$NODE scripts/cookies.mjs convert --from playwright --in storageState.json --out cookies.txt --format netscape
+$NODE scripts/cookies.mjs inspect cookies.txt        # 看条数/域名/是否过期
+
 # 启动（只监听 127.0.0.1；自动重试 V8 偶发崩溃）
 $NODE scripts/serve.mjs ensure --port 9223 \
   --cookie cookies.json --cookie-jar cookies-out.json
@@ -83,9 +88,11 @@ $NODE scripts/serve.mjs stop   --port 9223
 
 # CDP 单步：导航 + 等选择器 + 取 DOM（零依赖）
 $NODE scripts/cdp.mjs --port 9223 --url "https://search.bilibili.com/all?keyword=xxx&order=pubdate" \
-  --poll-selector ".bili-video-card" --min 3 \
+  --poll-selector ".bili-video-card" --min 3 --status \
   --eval "JSON.stringify([...document.querySelectorAll('.bili-video-card')].slice(0,8).map(c=>({t:c.innerText.split('\n')[0]})))"
 ```
+
+`--status` 会额外返回 `LP.getPageStatus`（`httpStatus/jsErrors/missingGlobals/botChallenge`），用来判定"页面到底活没活"。
 
 要点：
 - **并发单位是连接**：一条 WebSocket 只能有一个页面（第二次 `Target.createTarget` 报 `-31998`）；并发就开多条连接，上限 `--cdp-max-connections`（默认 16）。

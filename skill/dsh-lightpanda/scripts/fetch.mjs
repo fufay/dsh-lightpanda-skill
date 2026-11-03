@@ -34,6 +34,9 @@ const json = flag('json');
 const obey = flag('obey-robots');
 const blockPriv = flag('block-private-networks');
 const loadRes = take('load-resources', null);
+const strip = take('strip', null);
+const waitSel = take('wait-selector', null);
+const waitUntil = take('wait-until', null);
 const noTelemetry = flag('no-telemetry');
 // 允许用户用 -- 分隔透传参数
 const sep = argv.indexOf('--');
@@ -45,6 +48,9 @@ if (json) args.push('--json');
 if (obey) args.push('--obey-robots');
 if (blockPriv) args.push('--block-private-networks');
 if (loadRes) args.push('--load-resources', String(loadRes));
+if (strip) args.push('--strip-mode', String(strip));
+if (waitSel) args.push('--wait-selector', String(waitSel));
+if (waitUntil) args.push('--wait-until', String(waitUntil));
 args.push(...passthru, ...argv);
 
 const env = { ...process.env };

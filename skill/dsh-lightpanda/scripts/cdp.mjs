@@ -15,6 +15,7 @@ const evalOnly = flag('eval-only');
 const waitMs = Number(opt('wait-ms', '5000'));
 const pollSel = opt('poll-selector', null);
 const pollMin = Number(opt('min', '3'));
+const wantStatus = argv.includes('--status');
 
 const v = await (await fetch(`http://127.0.0.1:${port}/json/version`)).json();
 const ws = new WebSocket(v.webSocketDebuggerUrl);
@@ -47,6 +48,10 @@ if (evalExpr) {
 if (sid) {
   const meta = await send('Runtime.evaluate', { expression: 'JSON.stringify({url:location.href,title:document.title})', returnByValue: true }, sid);
   try { Object.assign(out, JSON.parse(meta.result.result.value)); } catch {}
+  if (wantStatus) {
+    const st = await send('LP.getPageStatus', {}, sid);
+    out.page_status = st.result ?? null;
+  }
 }
 console.log(JSON.stringify(out));
 ws.close();
