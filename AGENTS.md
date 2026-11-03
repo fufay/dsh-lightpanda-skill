@@ -8,8 +8,8 @@
 
 - 名称：dsh-lightpanda-skill
 - 目录：/storage/Users/currentUser/projects/DSH_Proj/Skills/dsh-lightpanda-skill
-- 一句话目标：**待补**（写在 `docs/01-项目概览.md`）
-- 目标平台 / 运行环境：**待补**
+- 一句话目标：把 lightpanda 封装成**跨平台 DSH skill**（P2 无状态抓取 / P3 带 cookie 会话），二进制走 AtomGit+GitHub 发行、自动下载校验
+- 目标平台 / 运行环境：Windows(WSL2) / macOS(arm64,x64) / Linux(x86_64,aarch64) / HarmonyOS PC(aarch64，静态自签资产)；Node ≥18（推荐 24）
 - 创建日期：2026-11-03
 
 ## 二、铁律
@@ -31,7 +31,22 @@
 
 - 本机工具链与版本见 `docs/00-环境与工具链.md`（已核实，无需重复检查）。
 - 验收默认：**产物级核验**（sha256、版本号、关键串命中/0 命中）；真机或交互冒烟交给用户做。
-- 首次确定构建链后，把「一条命令构建」写进本文件 §三 与 `tools/`。
+- **本 skill 不改 lightpanda 源码**：二进制来自上游 nightly + 本机自建 OHOS 静态版（构建在 `Eva-Research/2026-11-02-lightpanda-评估/tools/build-lightpanda.sh`）。
+- 自检：
+  ```sh
+  NODE=node
+  $NODE skill/dsh-lightpanda/scripts/resolve.mjs --check      # 平台→资产
+  $NODE skill/dsh-lightpanda/scripts/fetch.mjs https://example.com --dump markdown
+  $NODE skill/dsh-lightpanda/scripts/serve.mjs ensure --port 9223
+  $NODE skill/dsh-lightpanda/scripts/cdp.mjs --port 9223 --eval-only "1+1"
+  ```
+- 发布（详见 `docs/03`）：
+  ```sh
+  git push …（GitHub / AtomGit 两个远端）
+  with-proxy.sh sh tools/publish-release.sh --tag <tag> --github-only
+  sh tools/publish-release.sh --tag <tag> --atomgit-only
+  ```
+- 资产来源与校验：`skill/dsh-lightpanda/assets/manifest.json`（sha256/size/tag/镜像）。
 
 ## 四、git
 
@@ -46,14 +61,8 @@
 | `HANDOFF.md` | 当前状态 / 下一步 / 坑 |
 | `DECISIONS.md` | 决策记录（只追加） |
 | `README.md` | 文档索引 |
-| `docs/00-环境与工具链.md` | **本机环境索引**（核心版本 + 专题文档入口；细节在 03–09） |
+| `docs/00-环境与工具链.md` | 本机环境索引（模板保留） |
 | `docs/01-项目概览.md` | 目标 / 范围 / 明确不做 |
-| `docs/02-参考资源清单.md` | 外部参考/下载资源登记（实体在 `_refer/`） |
-| `docs/03-原生代码与签名.md` | 原生项目的 `.codesign` / dlopen / ELF 签名（非原生项目可忽略） |
-| `docs/04-鸿蒙App与HAP开发.md` | **HAP / 鸿蒙 App 全链路**：hmos-clt/devecocli、签名（AGC/Profile/ACL）、hdc 桥、装机/日志、常见坑与验收 |
-| `docs/05-.NET能力与场景.md` | **.NET 能力图**：CLI/类库/ASP.NET/NativeAOT/Godot C#、安装与边界 |
-| `docs/06-Godot-OHOS环境.md` | Godot kit 路径 / headless 命令 / 约定 |
-| `docs/07-VM构建环境.md` | 兜底 VM（openEuler）Linux 构建环境 |
-| `docs/08-工具链清单与自检.md` | 完整工具链清单 / brew 家底 / 自检命令 |
-| `docs/09-本机约定与通用坑.md` | 文件/沙箱约定、网络/git、通用坑 |
-| `docs/99-参考链接.md` | 来源链接与出处 |
+| `docs/02-参考资源清单.md` | 上游与发行资产登记（sha256） |
+| `docs/03-发布与设计.md` | **结构与发布流程**（AtomGit API 要点、升级上游、验证清单） |
+| `docs/99-参考链接.md` | 来源链接 |

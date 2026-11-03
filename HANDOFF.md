@@ -11,17 +11,22 @@
 
 ## 1. 当前目标
 
-- **待补**：一句话说明本阶段要达成什么。
+把 lightpanda 封装成**跨平台 DSH skill**（P2 纯页面抓取 / P3 带 cookie 会话），并从 AtomGit + GitHub 发行预编译资产，用户零编译可用。
 
-## 2. 上次做到哪
+## 2. 上次做到哪（2026-11-03）
 
-- 2026-11-03：初始化项目骨架（`AGENTS.md` / `HANDOFF.md` / `DECISIONS.md` / `README.md` / `docs/` 编号文档 / `tools/` / `.gitignore`）。
+- 项目骨架 + `skill/dsh-lightpanda/`（SKILL.md + 4 个脚本 + assets/manifest.json）
+- 脚本实测通过（HarmonyOS PC）：`resolve`（本地/下载+sha256）、`fetch`（example.com）、`serve ensure` + `cdp`（title + 41）
+- 仓库已建：GitHub `fufay/dsh-lightpanda-skill`、AtomGit `Kevin911/dsh-lightpanda-skill`（代码已推）
+- 发行 `lightpanda-1.1.0-dev.11522`：5 个平台资产 + manifest 上传到两个平台（见 release 页）
+- 平台矩阵：OHOS/Linux-aarch64 静态自签、Linux-x86_64 glibc、macOS 两种；Windows → WSL2
 
-## 3. 下一步（按优先级）
+## 3. 下一步
 
-1. 补 `docs/01-项目概览.md`：目标、范围、**明确不做**。
-2. 确定构建链（按项目类型选，见 `docs/00-环境与工具链.md` §2），写进 `AGENTS.md` §三。
-3. 搭出第一个可运行骨架并产物级验证。
+1. **跨平台实测**：macOS/Windows(WSL2)/Linux x86_64 各跑一次 `resolve`+`fetch`（本会话只测了 OHOS）。
+2. 站点适配表迭代（把已验证的 B站/新发地收进 skill 的 sites 推荐用法；失败降级）。
+3. 需要"模型自助调用"时评估 MCP 形态（`lightpanda mcp`，注意 39 工具上下文成本）。
+4. 上游 nightly 更新后按 `docs/03` §4 重发资产。
 
 ## 4. 已知坑 / 约束（别重复踩）
 

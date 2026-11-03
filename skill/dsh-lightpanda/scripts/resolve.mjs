@@ -16,7 +16,7 @@ const MANIFEST = JSON.parse(readFileSync(join(HERE, '..', 'assets', 'manifest.js
 const CACHE = process.env.DSH_LIGHTPANDA_CACHE || join(homedir(), '.cache', 'dsh-lightpanda');
 const TAG = MANIFEST.release_tag;
 
-const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i > 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
+const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : d; };
 const has = (n) => process.argv.includes('--' + n);
 
 function platformKey() {

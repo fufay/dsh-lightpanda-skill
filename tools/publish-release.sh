@@ -9,10 +9,13 @@ set -eu
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 ASSETS=$ROOT/_build/assets
 TAG=""
+ONLY=${ONLY:-both}
 while [ $# -gt 0 ]; do
   case "$1" in
     --tag) TAG=$2; shift 2;;
     --assets) ASSETS=$2; shift 2;;
+    --github-only) ONLY=github; shift;;
+    --atomgit-only) ONLY=atomgit; shift;;
     *) echo "unknown arg: $1"; exit 2;;
   esac
 done
@@ -28,6 +31,7 @@ fi
 B=/storage/Users/currentUser/.harmonybrew/bin
 GH=$B/gh
 [ -x "$GH" ] || GH=gh
+if [ "$ONLY" != "atomgit" ]; then
 echo "== GitHub release =="
 if "$GH" release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
   echo "[gh] release 已存在"
@@ -36,8 +40,11 @@ else
 fi
 echo "== GitHub 上传 =="
 for f in "$ASSETS"/*; do [ -f "$f" ] && "$GH" release upload "$TAG" "$f" --repo "$GH_REPO" --clobber; done
+fi
+if [ "$ONLY" != "github" ]; then
 echo "== AtomGit release =="
 python3 "$ROOT/tools/atomgit_release.py" --repo "$AT_REPO" --tag "$TAG" --name "$TAG" --body-file "$NOTES" --assets "$ASSETS"
+fi
 echo "✅ 完成"
 echo "GitHub:  https://github.com/$GH_REPO/releases/tag/$TAG"
 echo "AtomGit: https://atomgit.com/$AT_REPO/releases/tag/$TAG"

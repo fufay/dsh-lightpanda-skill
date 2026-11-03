@@ -19,7 +19,7 @@ const STATE_DIR = join(CACHE, 'serve');
 
 const argv = process.argv.slice(2);
 const cmd = argv[0] || 'status';
-const opt = (n, d) => { const i = argv.indexOf('--' + n); return i > 0 && argv[i + 1] ? argv[i + 1] : d; };
+const opt = (n, d) => { const i = argv.indexOf('--' + n); return i >= 0 && argv[i + 1] ? argv[i + 1] : d; };
 const flag = (n) => argv.includes('--' + n);
 const port = Number(opt('port', '9223'));
 const stateFile = join(STATE_DIR, `serve-${port}.json`);
