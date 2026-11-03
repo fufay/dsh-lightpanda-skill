@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "generated_at": "2026-11-03T09:36:38+08:00",
+  "release_tag": "lightpanda-1.1.0-dev.11522",
+  "upstream": {
+    "repo": "lightpanda-io/browser",
+    "channel": "nightly",
+    "fetched_at": "2026-11-03"
+  },
+  "assets": [
+    {
+      "os": "linux",
+      "arch": "x86_64",
+      "libc": "glibc",
+      "file": "lightpanda-x86_64-linux",
+      "size": 77186376,
+      "sha256": "e7621a1643b573c51940aa82613623004107b330ea0c91a782fe591e99456178",
+      "source": "upstream-nightly"
+    },
+    {
+      "os": "linux",
+      "arch": "aarch64",
+      "libc": "glibc",
+      "file": "lightpanda-aarch64-linux",
+      "size": 74354760,
+      "sha256": "4021e26730b2955154b24770812d50476b3259d9b0850f4da88e38519917f756",
+      "source": "upstream-nightly"
+    },
+    {
+      "os": "macos",
+      "arch": "aarch64",
+      "libc": "darwin",
+      "file": "lightpanda-aarch64-macos",
+      "size": 91151016,
+      "sha256": "60f6f36960d5bf818f8b891919342eeeb6311f923509d6ee96087406ebdca8e7",
+      "source": "upstream-nightly"
+    },
+    {
+      "os": "macos",
+      "arch": "x86_64",
+      "libc": "darwin",
+      "file": "lightpanda-x86_64-macos",
+      "size": 95610784,
+      "sha256": "070b97b27b7c0bc63a0b49c324dd659c3212c0c738bc1c761e59740e385e1165",
+      "source": "upstream-nightly"
+    },
+    {
+      "os": "linux",
+      "arch": "aarch64",
+      "libc": "musl-static",
+      "file": "lightpanda-aarch64-ohos",
+      "size": 74372398,
+      "sha256": "942826021f03c8daf450061a19fb16c69170617029dc997b8f2f1dc4d0235743",
+      "source": "self-built-ohos",
+      "version": "1.1.0-dev.11522+daa09e7a"
+    }
+  ],
+  "notes": {
+    "linux-aarch64-static": "musl 静态并已为 HarmonyOS 自签；同时可用于 glibc/musl 的 aarch64 Linux 与 HarmonyOS PC",
+    "windows": "上游无原生 Windows 二进制，需 WSL2（用 linux-x86_64 资产）",
+    "macos": "未签名二进制；首次运行前需 xattr -d com.apple.quarantine",
+    "robots_telemetry": "运行期应设 LIGHTPANDA_DISABLE_TELEMETRY=1；--obey-robots/--block-private-networks 默认关闭，需显式开启",
+    "mirrors": [
+      "https://atomgit.com/Kevin911/dsh-lightpanda-skill/releases/download/<tag>/<file>",
+      "https://github.com/fufay/dsh-lightpanda-skill/releases/download/<tag>/<file>",
+      "https://github.com/lightpanda-io/browser/releases/download/nightly/<file>"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+# ── 构建产物（统一放**项目内 `_build/`**；上层 Build/ 也不入库）──────────
+Build/
+_build/
+_refer/
+node_modules/
+dist/
+build/
+.hvigor/
+.cxx/
+.idea/
+.vscode/
+local.properties
+*.tsbuildinfo
+
+# ── 密钥 / 环境文件（绝不入库）───────────────────────────────────────
+.env
+.env.*
+!.env.example
+*_private.json
+
+# ── 临时 / 杂项 ──────────────────────────────────────────────────────
+*.log
+*.bak
+*.tmp
+*.orig
+.DS_Store
+Thumbs.db
+*.swp
