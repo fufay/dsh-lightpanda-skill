@@ -102,6 +102,14 @@ $NODE "$DSH_HOME/skills/dsh-lightpanda/scripts/serve.mjs" stop --port 9223
 
 > agent 侧不用记这些：直接说「用 lightpanda 抓 <URL>」即可，`SKILL.md` 里有完整决策树。
 
+## 4.1 登录态（P3）的现状与设计方向
+
+当前 P3 需要"cookie 从哪来"。**设计稿见 [`docs/04-登录与凭据处理设计.md`](docs/04-登录与凭据处理设计.md)**（未实现）：
+
+- 核心原则：**秘密不进 agent 上下文**——agent 只拿 `cookie 文件路径 / 状态`，密码/短信由本地 helper 独立窗口输入。
+- 推荐路线：**扫码（无秘密）→ 本地 helper（密码/OTP）→ 钥匙串（可选）→ 凭据代理守护进程（后置）**。
+- 明确不做：验证码识别/绕过、把密码写进任何日志或会话。
+
 ## 5. 跨平台资产
 
 | 资产 | 平台 | 说明 |
@@ -146,4 +154,4 @@ sh tools/publish-release.sh --tag <tag> --atomgit-only
 | `skill/dsh-lightpanda/scripts/cookies.mjs` | cookie 导入与格式转换 |
 | `skill/dsh-lightpanda/assets/manifest.json` | 平台资产表 |
 | `tools/` | `install.sh`、`publish-release.sh`、`atomgit_release.py` |
-| `docs/` | 概览、参考资源、发布与设计 |
+| `docs/` | 概览、参考资源、发布与设计、**登录与凭据处理设计**（`docs/04`，设计稿未实现） |
